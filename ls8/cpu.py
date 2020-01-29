@@ -61,13 +61,13 @@ class CPU:
             #LDI
             elif self.ram[self.pc] == 0b10000010:
                 register = self.ram_read(self.pc+1)
-                value = selfa.ram_read(self.pc+2)
+                value = self.ram_read(self.pc+2)
                 self.reg[register] = value
                 self.pc += 3
             #PRN
             elif self.ram[self.pc] == 0b01000111:
                 print(self.reg[self.ram_read(self.pc+1)])
-                self.pc += 2 (edited) 
+                self.pc += 2 
 
 
 
