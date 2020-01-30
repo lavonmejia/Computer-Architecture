@@ -13,7 +13,7 @@ class CPU:
         return self.ram[position]
 
     def ram_write(self, address, value):
-        self.ram[int(address, 2)] = value
+        self.ram[address] = value
 
     # def load(self):
     #     """Load a program into memory."""
@@ -45,20 +45,15 @@ class CPU:
                 if line[0] == '#':
                     continue
                 instruction = line.split('#')
-                instruction = line[0].strip()
+                instruction = instruction[0].strip()
                 if instruction == "":
                     continue
-                print(line, bin(int(instruction, 2)))
-                self.ram[address] = bin(int('0b'+instruction, 2))
+                self.ram[address] = int(instruction, 2)
                 address += 1
 
         except FileNotFoundError:
             print(f"File not found: {sys.argv[1]}")
-            exit(2)
-
-        print('done')
-
-
+            exit(2)    
         
 
     def alu(self, op, reg_a, reg_b):
@@ -91,7 +86,6 @@ class CPU:
         """Run the CPU."""
         cpu_running = True
         while cpu_running:
-            print(self.ram[self.pc], 0b00000001 == self.ram[self.pc], type(self.ram[self.pc]), type(0b00000001))
             #HLT
             if self.ram[self.pc] == 0b00000001:
                 exit(1)
@@ -105,3 +99,9 @@ class CPU:
             elif self.ram[self.pc] == 0b01000111:
                 print(self.reg[self.ram_read(self.pc+1)])
                 self.pc += 2
+            #MUL
+            elif self.ram[self.pc] == 0b10100010:
+                operand_1 = self.reg[self.ram_read(self.pc+1)]
+                operand_2 = self.reg[self.ram_read(self.pc+2)]
+                self.reg[self.ram_read(self.pc+1)] = operand_1 * operand_2
+                self.pc += 3
